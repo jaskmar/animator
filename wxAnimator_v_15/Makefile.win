@@ -1,0 +1,124 @@
+# Project: Animator
+# Compiler: Default GCC compiler
+# Compiler Type: MingW 3
+# Makefile created by wxDev-C++ IDE 7.4.2.569 on 28-01-13 00:11
+
+WXLIBNAME = wxmsw29u
+CPP       = g++.exe
+CC        = gcc.exe
+WINDRES   = "windres.exe"
+OBJ       = Objects/MingW/AnimatorApp.o Objects/MingW/AnimatorFrm.o Objects/MingW/controller.o Objects/MingW/przejscie.o Objects/MingW/VPrzejscia.o Objects/MingW/PPrzenikanie.o Objects/MingW/PPrzepychanie_up.o Objects/MingW/PFarba.o Objects/MingW/PPaski.o Objects/MingW/PPrzepychanie_down.o Objects/MingW/PPrzepychanie_left.o Objects/MingW/PBoks_in.o Objects/MingW/PBoks_out.o Objects/MingW/PNajazd_up.o Objects/MingW/POdkrywanie_up.o Objects/MingW/POdswiezanie_up.o Objects/MingW/POdwrot.o Objects/MingW/POkno.o Objects/MingW/PPrzepychanie_right.o Objects/MingW/PHsv.o Objects/MingW/PKostka.o Objects/MingW/PPrzylot.o Objects/MingW/PKolejnoscJasnosc.o Objects/MingW/PTesty.o Objects/MingW/PCzern.o Objects/MingW/POdlot.o Objects/MingW/PRGB.o Objects/MingW/PBlur.o Objects/MingW/Animator_private.res
+LINKOBJ   = "Objects/MingW/AnimatorApp.o" "Objects/MingW/AnimatorFrm.o" "Objects/MingW/controller.o" "Objects/MingW/przejscie.o" "Objects/MingW/VPrzejscia.o" "Objects/MingW/PPrzenikanie.o" "Objects/MingW/PPrzepychanie_up.o" "Objects/MingW/PFarba.o" "Objects/MingW/PPaski.o" "Objects/MingW/PPrzepychanie_down.o" "Objects/MingW/PPrzepychanie_left.o" "Objects/MingW/PBoks_in.o" "Objects/MingW/PBoks_out.o" "Objects/MingW/PNajazd_up.o" "Objects/MingW/POdkrywanie_up.o" "Objects/MingW/POdswiezanie_up.o" "Objects/MingW/POdwrot.o" "Objects/MingW/POkno.o" "Objects/MingW/PPrzepychanie_right.o" "Objects/MingW/PHsv.o" "Objects/MingW/PKostka.o" "Objects/MingW/PPrzylot.o" "Objects/MingW/PKolejnoscJasnosc.o" "Objects/MingW/PTesty.o" "Objects/MingW/PCzern.o" "Objects/MingW/POdlot.o" "Objects/MingW/PRGB.o" "Objects/MingW/PBlur.o" Objects/MingW/Animator_private.res
+LIBS      = -L"C:/Program Files (x86)/Dev-Cpp/lib/wx/gcc_lib" -L"C:/Program Files (x86)/Dev-Cpp/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib" -mwindows -l$(WXLIBNAME) -l$(WXLIBNAME)_gl -lwxscintilla -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregexu -lwxexpat -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -lopengl32  -g3 
+INCS      = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include"
+CXXINCS   = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Program Files (x86)/Dev-Cpp/" -I"C:/Program Files (x86)/Dev-Cpp/include/common"
+RCINCS    = --include-dir "C:/PROGRA~2/Dev-Cpp/include/common"
+BIN       = Output/MingW/Animator.exe
+DEFINES   = -D__WXMSW__ -D__GNUWIN32__ -D_UNICODE
+CXXFLAGS  = $(CXXINCS) $(DEFINES)   -g3
+CFLAGS    = $(INCS) $(DEFINES)   -g3
+GPROF     = gprof.exe
+ifeq ($(OS),Windows_NT)
+   RM = del /Q
+   FixPath = $(subst /,\,$1)
+else
+   RM = rm -f
+   FixPath = $1
+endif
+LINK      = g++.exe
+
+.PHONY: all all-before all-after clean clean-custom
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	$(RM) $(call FixPath,$(LINKOBJ)) "$(call FixPath,$(BIN))"
+
+$(BIN): $(OBJ)
+	$(LINK) $(LINKOBJ) -o "$(BIN)" $(LIBS) 
+
+Objects/MingW/AnimatorApp.o: $(GLOBALDEPS) AnimatorApp.cpp AnimatorApp.h AnimatorFrm.h controller.h przejscie.h controller.h VPrzejscia.h przejscie.h
+	$(CPP) -c AnimatorApp.cpp -o Objects/MingW/AnimatorApp.o $(CXXFLAGS)
+
+Objects/MingW/AnimatorFrm.o: $(GLOBALDEPS) AnimatorFrm.cpp AnimatorFrm.h controller.h przejscie.h controller.h VPrzejscia.h przejscie.h Images/AnimatorFrm_WxBitmapButton3_XPM.xpm Images/AnimatorFrm_WxBitmapButton2_XPM.xpm Images/AnimatorFrm_WxBitmapButton1_XPM.xpm
+	$(CPP) -c AnimatorFrm.cpp -o Objects/MingW/AnimatorFrm.o $(CXXFLAGS)
+
+Objects/MingW/controller.o: $(GLOBALDEPS) controller.cpp controller.h przejscie.h controller.h
+	$(CPP) -c controller.cpp -o Objects/MingW/controller.o $(CXXFLAGS)
+
+Objects/MingW/przejscie.o: $(GLOBALDEPS) przejscie.cpp przejscie.h controller.h przejscie.h
+	$(CPP) -c przejscie.cpp -o Objects/MingW/przejscie.o $(CXXFLAGS)
+
+Objects/MingW/VPrzejscia.o: $(GLOBALDEPS) VPrzejscia.cpp VPrzejscia.h przejscie.h controller.h przejscie.h P/PPrzenikanie.h przejscie.h P/PPrzepychanie_up.h przejscie.h P/PPrzepychanie_down.h przejscie.h P/PPrzepychanie_left.h przejscie.h P/PPrzepychanie_right.h przejscie.h P/PNajazd_up.h przejscie.h P/POdkrywanie_up.h przejscie.h P/POdswiezanie_up.h przejscie.h P/PBoks_in.h przejscie.h P/PBoks_out.h przejscie.h P/PFarba.h przejscie.h P/PPaski.h przejscie.h P/POkno.h przejscie.h P/POdwrot.h przejscie.h P/PHsv.h przejscie.h P/PKostka.h przejscie.h P/PPrzylot.h przejscie.h P/PKolejnoscJasnosc.h przejscie.h P/PCzern.h przejscie.h P/POdlot.h przejscie.h P/PRGB.h przejscie.h P/PBlur.h przejscie.h P/PTesty.h przejscie.h
+	$(CPP) -c VPrzejscia.cpp -o Objects/MingW/VPrzejscia.o $(CXXFLAGS)
+
+Objects/MingW/PPrzenikanie.o: $(GLOBALDEPS) P/PPrzenikanie.cpp P/PPrzenikanie.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PPrzenikanie.cpp -o Objects/MingW/PPrzenikanie.o $(CXXFLAGS)
+
+Objects/MingW/PPrzepychanie_up.o: $(GLOBALDEPS) P/PPrzepychanie_up.cpp P/PPrzepychanie_up.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PPrzepychanie_up.cpp -o Objects/MingW/PPrzepychanie_up.o $(CXXFLAGS)
+
+Objects/MingW/PFarba.o: $(GLOBALDEPS) P/PFarba.cpp P/PFarba.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PFarba.cpp -o Objects/MingW/PFarba.o $(CXXFLAGS)
+
+Objects/MingW/PPaski.o: $(GLOBALDEPS) P/PPaski.cpp P/PPaski.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PPaski.cpp -o Objects/MingW/PPaski.o $(CXXFLAGS)
+
+Objects/MingW/PPrzepychanie_down.o: $(GLOBALDEPS) P/PPrzepychanie_down.cpp P/PPrzepychanie_down.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PPrzepychanie_down.cpp -o Objects/MingW/PPrzepychanie_down.o $(CXXFLAGS)
+
+Objects/MingW/PPrzepychanie_left.o: $(GLOBALDEPS) P/PPrzepychanie_left.cpp P/PPrzepychanie_left.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PPrzepychanie_left.cpp -o Objects/MingW/PPrzepychanie_left.o $(CXXFLAGS)
+
+Objects/MingW/PBoks_in.o: $(GLOBALDEPS) P/PBoks_in.cpp P/PBoks_in.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PBoks_in.cpp -o Objects/MingW/PBoks_in.o $(CXXFLAGS)
+
+Objects/MingW/PBoks_out.o: $(GLOBALDEPS) P/PBoks_out.cpp P/PBoks_out.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PBoks_out.cpp -o Objects/MingW/PBoks_out.o $(CXXFLAGS)
+
+Objects/MingW/PNajazd_up.o: $(GLOBALDEPS) P/PNajazd_up.cpp P/PNajazd_up.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PNajazd_up.cpp -o Objects/MingW/PNajazd_up.o $(CXXFLAGS)
+
+Objects/MingW/POdkrywanie_up.o: $(GLOBALDEPS) P/POdkrywanie_up.cpp P/POdkrywanie_up.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/POdkrywanie_up.cpp -o Objects/MingW/POdkrywanie_up.o $(CXXFLAGS)
+
+Objects/MingW/POdswiezanie_up.o: $(GLOBALDEPS) P/POdswiezanie_up.cpp P/POdswiezanie_up.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/POdswiezanie_up.cpp -o Objects/MingW/POdswiezanie_up.o $(CXXFLAGS)
+
+Objects/MingW/POdwrot.o: $(GLOBALDEPS) P/POdwrot.cpp P/POdwrot.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/POdwrot.cpp -o Objects/MingW/POdwrot.o $(CXXFLAGS)
+
+Objects/MingW/POkno.o: $(GLOBALDEPS) P/POkno.cpp P/POkno.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/POkno.cpp -o Objects/MingW/POkno.o $(CXXFLAGS)
+
+Objects/MingW/PPrzepychanie_right.o: $(GLOBALDEPS) P/PPrzepychanie_right.cpp P/PPrzepychanie_right.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PPrzepychanie_right.cpp -o Objects/MingW/PPrzepychanie_right.o $(CXXFLAGS)
+
+Objects/MingW/PHsv.o: $(GLOBALDEPS) P/PHsv.cpp P/PHsv.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PHsv.cpp -o Objects/MingW/PHsv.o $(CXXFLAGS)
+
+Objects/MingW/PKostka.o: $(GLOBALDEPS) P/PKostka.cpp P/PKostka.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PKostka.cpp -o Objects/MingW/PKostka.o $(CXXFLAGS)
+
+Objects/MingW/PPrzylot.o: $(GLOBALDEPS) P/PPrzylot.cpp P/PPrzylot.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PPrzylot.cpp -o Objects/MingW/PPrzylot.o $(CXXFLAGS)
+
+Objects/MingW/PKolejnoscJasnosc.o: $(GLOBALDEPS) P/PKolejnoscJasnosc.cpp P/PKolejnoscJasnosc.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PKolejnoscJasnosc.cpp -o Objects/MingW/PKolejnoscJasnosc.o $(CXXFLAGS)
+
+Objects/MingW/PTesty.o: $(GLOBALDEPS) P/PTesty.cpp P/PTesty.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PTesty.cpp -o Objects/MingW/PTesty.o $(CXXFLAGS)
+
+Objects/MingW/PCzern.o: $(GLOBALDEPS) P/PCzern.cpp P/PCzern.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PCzern.cpp -o Objects/MingW/PCzern.o $(CXXFLAGS)
+
+Objects/MingW/POdlot.o: $(GLOBALDEPS) P/POdlot.cpp P/POdlot.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/POdlot.cpp -o Objects/MingW/POdlot.o $(CXXFLAGS)
+
+Objects/MingW/PRGB.o: $(GLOBALDEPS) P/PRGB.cpp P/PRGB.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PRGB.cpp -o Objects/MingW/PRGB.o $(CXXFLAGS)
+
+Objects/MingW/PBlur.o: $(GLOBALDEPS) P/PBlur.cpp P/PBlur.h przejscie.h controller.h przejscie.h
+	$(CPP) -c P/PBlur.cpp -o Objects/MingW/PBlur.o $(CXXFLAGS)
+
+Objects/MingW/Animator_private.res: Objects/MingW/Animator_private.rc AnimatorApp.rc 
+	$(WINDRES) --input-format=rc -o Objects/MingW/Animator_private.res $(RCINCS) Objects/MingW/ANIMAT~1.RC -O coff
