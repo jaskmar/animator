@@ -6,7 +6,7 @@
 class Controller;
 
 #include "przejscie.h"
-#include <wx/wx.h>
+#include <QImage>
 #include <vector>
 using namespace std;
 
@@ -24,9 +24,9 @@ class Controller
 		void setFrames(int arg);
 		//void setPrzejscie();
 		
-        wxImage& getImg1();
-        wxImage& getImg2();
-        wxImage& getOutput(int i);
+        QImage& getImg1();
+        QImage& getImg2();
+        QImage& getOutput(int i);
         void setPrzejscie(Przejscie *arg);
         const vector<string>& getEasings();
         void setEasing(int num);
@@ -36,12 +36,12 @@ class Controller
         void generate();
 	private:
         float easing (float arg);
-        wxImage Img1;
-        wxImage Img2;
+        QImage Img1;
+        QImage Img2;
         int Frames;
         bool Ready;
         Przejscie *MyPrzejscie;
-        vector<wxImage*> Output;
+        vector<QImage*> Output;
         vector<string> Easings;
         int EasingNum;
 };
