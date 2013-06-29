@@ -1414,6 +1414,9 @@
     </item>
     <item>
      <widget class="QFrame" name="FNawigacja">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -1454,7 +1457,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QSlider" name="horizontalSlider">
+        <widget class="QSlider" name="Nawigator">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -1649,7 +1652,7 @@
      <x>0</x>
      <y>0</y>
      <width>706</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

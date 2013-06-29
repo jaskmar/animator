@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPainter>
+#include <QTimer>
 #include "controller.h"
 #include "VPrzejscia.h"
 
@@ -28,12 +29,23 @@ private slots:
 
     void on_pushButton_5_clicked();
 
+    void on_pushButton_6_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void onTimer();
+
+    void on_PrzejsciaList_currentRowChanged(int currentRow);
+
 private:
     Ui::MainWindow *ui;
     void UpdateLabels();
     Controller Controll;
     VPrzejscia *Przejscia;
     QPixmap *EkranP;
+    QTimer Timer;
 };
 
 #endif // MAINWINDOW_H

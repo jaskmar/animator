@@ -1,0 +1,4 @@
+Jak wczytasz obrazek to musi się doopasowywać do okienka
+Animacja też się powinna dopasować do okienka
+Nie działa jeszcze easing
+Nie pamietam co jeszcze

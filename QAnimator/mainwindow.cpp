@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QTextCodec>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     EkranP = new QPixmap();
     Przejscia = VPrzejscia::getPrzejscia();
-    for (int i=Przejscia->size()-1; i>=0; i--)
+    for (int i=0; i<Przejscia->size(); i++)
     {
         QString tmp = tr(Przejscia->at(i)->getName().c_str());
         ui->PrzejsciaList->addItem(tmp);
@@ -28,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->EasingList->setCurrentRow(0);
 
     ui->FNawigacja->setEnabled(false);
+
+    connect(&Timer, SIGNAL(timeout()), this, SLOT(onTimer()));
+    Timer.setSingleShot(false);
 }
 
 MainWindow::~MainWindow()
@@ -74,20 +78,11 @@ void MainWindow::UpdateLabels()
     tmp = QString::number(v) + "fps";
     ui->LabelFps->setText(tmp);
 
-    //Controll.setFrames(SliderF->GetValue());
+    Controll.setFrames(ui->SliderF->value());
 }
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    /*WxOpenFileDialog1->SetWildcard("Pliki JPG (*.jpg)|*.jpg");
-    if (WxOpenFileDialog1->ShowModal()==wxID_OK)
-    {
-        Controll.getImg1().LoadFile(WxOpenFileDialog1->GetPath());
-        SBitmap1->SetBackgroundColour(wxColour(240,240,240));
-        refresh();
-        WxPanel3->Enable(false);
-    }*/
-
     QFileDialog Dialog(this);
     Dialog.setFileMode(QFileDialog::ExistingFile);
     Dialog.setNameFilter(tr("Images (*.png *.jpg)"));
@@ -100,4 +95,71 @@ void MainWindow::on_pushButton_5_clicked()
          a->convertFromImage(Controll.getImg1());
          ui->Podglad1->setPixmap(*a);
      }
+}
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    QFileDialog Dialog(this);
+    Dialog.setFileMode(QFileDialog::ExistingFile);
+    Dialog.setNameFilter(tr("Images (*.png *.jpg)"));
+    QString FileName;
+     if (Dialog.exec())
+     {
+         FileName = Dialog.selectedFiles()[0];
+         Controll.getImg2().load(FileName);
+         QPixmap *a = new QPixmap();
+         a->convertFromImage(Controll.getImg2());
+         ui->Podglad2->setPixmap(*a);
+     }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    if (Controll.getImg1().isNull() || Controll.getImg2().isNull())
+    {
+        QMessageBox::warning(this, tr("Brak gotowości"), tr("Musisz wybrać dwa obrazki"));
+        return;
+    }
+    //setSizeOk();
+    Controll.clear();
+    Controll.generate();
+    ui->Nawigator->setRange(0, ui->SliderF->value()-1);
+    ui->Nawigator->setValue(0);
+    ui->FNawigacja->setEnabled(true);
+
+    //ui->Ekran->SetBackgroundColour(QColour(240,240,240));
+    QMessageBox::information(this, tr("Sukces"), tr("Animacja została wygenerowana"));
+    //refresh();
+}
+
+void MainWindow::on_pushButton_3_clicked()  //play
+{
+    if (ui->Nawigator->value()==ui->Nawigator->maximum()) ui->Nawigator->setValue(0);
+    Timer.setInterval(1000.0/ui->SliderFps->value() + 0.5);
+    Timer.start();
+}
+
+void MainWindow::onTimer()
+{
+    int N = ui->Nawigator->value();
+    ui->Nawigator->setValue(N+1);
+
+    QImage *tmp = &Controll.getOutput(N);
+
+    QPixmap *a = new QPixmap();
+    a->convertFromImage(*tmp);
+    ui->Ekran->setPixmap(*a);
+
+    if (N>=ui->Nawigator->maximum())
+    {
+        Timer.stop();
+        return;
+    }
+}
+
+void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow)
+{
+    int N = currentRow;
+    Controll.setPrzejscie(Przejscia->at(N));
+    ui->FNawigacja->setEnabled(false);
 }
