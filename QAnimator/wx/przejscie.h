@@ -7,8 +7,6 @@ class Przejscie;
 
 #include "controller.h"
 #include <string>
-#include <cmath>
-#include <QImage>
 using namespace std;
 typedef unsigned char uchar;
 
@@ -25,8 +23,6 @@ class Przejscie
 	
 	protected:
 	virtual uchar* generateFrame(float percent, int W, int H, uchar *Start, uchar *Stop)=0;
-    void Img2UcharTab(const QImage &Img, uchar* Out);   //funkcja adaptacyjna
-    void UcharTab2Img(const uchar* const In, QImage &Img);   //funkcja adaptacyjna
 	
 	string Name;
 };

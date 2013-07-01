@@ -1,4 +1,4 @@
-Jak wczytasz obrazek to musi się doopasowywać do okienka
-Animacja też się powinna dopasować do okienka
+Nie wyswietla sie ostatnia klataka - nie wiem czemu
 Nie działa jeszcze easing
+Moznaby dodac pasek postepu przy generowaniu
 Nie pamietam co jeszcze

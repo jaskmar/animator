@@ -22,12 +22,12 @@ string Przejscie::getName()
 
 void Przejscie::generate(Controller *C)
 {
-    int w = C->Img1.width();
-    int h = C->Img1.height();
+    int w = C->Img1.width() > C->Img2.width() ? C->Img1.width() : C->Img2.width();
+    int h = C->Img1.height() > C->Img2.height() ? C->Img1.height() : C->Img2.height();
     uchar *Start=new uchar[w*h*3];
     uchar *Stop=new uchar[w*h*3];
-    Img2UcharTab(C->Img1, Start);
-    Img2UcharTab(C->Img2, Stop);
+    Img2UcharTab(C->Img1.scaled(w,h), Start);
+    Img2UcharTab(C->Img2.scaled(w,h), Stop);
 
     for (int i=0; i<C->Frames; i++)
     {

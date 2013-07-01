@@ -81,7 +81,7 @@ void MainWindow::UpdateLabels()
     Controll.setFrames(ui->SliderF->value());
 }
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_pushButton_5_clicked()  //Wczytaj1
 {
     QFileDialog Dialog(this);
     Dialog.setFileMode(QFileDialog::ExistingFile);
@@ -91,13 +91,11 @@ void MainWindow::on_pushButton_5_clicked()
      {
          FileName = Dialog.selectedFiles()[0];
          Controll.getImg1().load(FileName);
-         QPixmap *a = new QPixmap();
-         a->convertFromImage(Controll.getImg1());
-         ui->Podglad1->setPixmap(*a);
+         resizeEvent(NULL);
      }
 }
 
-void MainWindow::on_pushButton_6_clicked()
+void MainWindow::on_pushButton_6_clicked()  //Wczytaj2
 {
     QFileDialog Dialog(this);
     Dialog.setFileMode(QFileDialog::ExistingFile);
@@ -107,9 +105,7 @@ void MainWindow::on_pushButton_6_clicked()
      {
          FileName = Dialog.selectedFiles()[0];
          Controll.getImg2().load(FileName);
-         QPixmap *a = new QPixmap();
-         a->convertFromImage(Controll.getImg2());
-         ui->Podglad2->setPixmap(*a);
+         resizeEvent(NULL);
      }
 }
 
@@ -134,7 +130,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_3_clicked()  //play
 {
-    if (ui->Nawigator->value()==ui->Nawigator->maximum()) ui->Nawigator->setValue(0);
+    if (ui->Nawigator->value()>=ui->Nawigator->maximum()) ui->Nawigator->setValue(0);
     Timer.setInterval(1000.0/ui->SliderFps->value() + 0.5);
     Timer.start();
 }
@@ -148,12 +144,12 @@ void MainWindow::onTimer()
 
     QPixmap *a = new QPixmap();
     a->convertFromImage(*tmp);
-    ui->Ekran->setPixmap(*a);
+    ui->Ekran->setPixmap( a->scaled(ui->Ekran->size(), Qt::KeepAspectRatio) );
+    delete a;
 
     if (N>=ui->Nawigator->maximum())
     {
         Timer.stop();
-        return;
     }
 }
 
@@ -162,4 +158,24 @@ void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow)
     int N = currentRow;
     Controll.setPrzejscie(Przejscia->at(N));
     ui->FNawigacja->setEnabled(false);
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+    if (!Controll.getImg1().isNull())
+    {
+        QPixmap *a = new QPixmap();
+        a->convertFromImage(Controll.getImg1());
+        QPixmap Skalowana = a->scaled(ui->Podglad1->size(), Qt::KeepAspectRatio);
+        delete a;
+        ui->Podglad1->setPixmap(Skalowana);
+    }
+    if (!Controll.getImg2().isNull())
+    {
+        QPixmap *a = new QPixmap();
+        a->convertFromImage(Controll.getImg2());
+        QPixmap Skalowana = a->scaled(ui->Podglad1->size(), Qt::KeepAspectRatio);
+        delete a;
+        ui->Podglad2->setPixmap(Skalowana);
+    }
 }
