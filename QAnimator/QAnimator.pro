@@ -34,12 +34,10 @@ SOURCES += main.cpp\
     P/PNajazd_up.cpp \
     P/PKostka.cpp \
     P/PKolejnoscJasnosc.cpp \
-    P/PHsv.cpp \
     P/PFarba.cpp \
     P/PCzern.cpp \
     P/PBoks_out.cpp \
-    P/PBoks_in.cpp \
-    P/PBlur.cpp
+    P/PBoks_in.cpp
 
 HEADERS  += mainwindow.h \
     VPrzejscia.h \
@@ -62,11 +60,9 @@ HEADERS  += mainwindow.h \
     P/PNajazd_up.h \
     P/PKostka.h \
     P/PKolejnoscJasnosc.h \
-    P/PHsv.h \
     P/PFarba.h \
     P/PCzern.h \
     P/PBoks_out.h \
-    P/PBoks_in.h \
-    P/PBlur.h
+    P/PBoks_in.h
 
 FORMS    += mainwindow.ui

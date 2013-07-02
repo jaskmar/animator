@@ -7,6 +7,7 @@ class Controller;
 
 #include "przejscie.h"
 #include <QImage>
+#include <QProgressBar>
 #include <vector>
 using namespace std;
 
@@ -22,7 +23,6 @@ class Controller
 		// class destructor
 		~Controller();
 		void setFrames(int arg);
-		//void setPrzejscie();
 		
         QImage& getImg1();
         QImage& getImg2();
@@ -33,7 +33,7 @@ class Controller
         int getFrames() const;
         bool isReady();
         void clear();
-        void generate();
+        void generate(QProgressBar *ProgressBar);
 	private:
         float easing (float arg);
         QImage Img1;

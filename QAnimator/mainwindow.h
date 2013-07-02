@@ -39,6 +39,8 @@ private slots:
 
     void on_PrzejsciaList_currentRowChanged(int currentRow);
 
+    void on_EasingList_currentRowChanged(int currentRow);
+
 private:
     virtual void resizeEvent (QResizeEvent * event);
     Ui::MainWindow *ui;

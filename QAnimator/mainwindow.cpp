@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     ui->setupUi(this);
+    ui->progressBar->setVisible(false);
     EkranP = new QPixmap();
     Przejscia = VPrzejscia::getPrzejscia();
     for (int i=0; i<Przejscia->size(); i++)
@@ -21,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->PrzejsciaList->setCurrentRow(0);
 
     const vector<string> E = Controll.getEasings();
-    for (int i=E.size()-1; i>=0; i--)
+    for (int i=0; i<E.size(); i++)
     {
         QString tmp = tr(E[i].c_str());
         ui->EasingList->addItem(tmp);
@@ -116,16 +117,15 @@ void MainWindow::on_pushButton_clicked()
         QMessageBox::warning(this, tr("Brak gotowości"), tr("Musisz wybrać dwa obrazki"));
         return;
     }
-    //setSizeOk();
+    ui->progressBar->setVisible(true);
     Controll.clear();
-    Controll.generate();
+    Controll.generate(ui->progressBar);
     ui->Nawigator->setRange(0, ui->SliderF->value()-1);
     ui->Nawigator->setValue(0);
     ui->FNawigacja->setEnabled(true);
+    ui->progressBar->setVisible(false);
 
-    //ui->Ekran->SetBackgroundColour(QColour(240,240,240));
     QMessageBox::information(this, tr("Sukces"), tr("Animacja została wygenerowana"));
-    //refresh();
 }
 
 void MainWindow::on_pushButton_3_clicked()  //play
@@ -155,8 +155,7 @@ void MainWindow::onTimer()
 
 void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow)
 {
-    int N = currentRow;
-    Controll.setPrzejscie(Przejscia->at(N));
+    Controll.setPrzejscie(Przejscia->at(currentRow));
     ui->FNawigacja->setEnabled(false);
 }
 
@@ -178,4 +177,10 @@ void MainWindow::resizeEvent(QResizeEvent* event)
         delete a;
         ui->Podglad2->setPixmap(Skalowana);
     }
+}
+
+void MainWindow::on_EasingList_currentRowChanged(int currentRow)
+{
+    Controll.setEasing(currentRow);
+    ui->FNawigacja->setEnabled(false);
 }

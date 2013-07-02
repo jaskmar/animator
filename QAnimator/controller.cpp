@@ -71,10 +71,10 @@ void Controller::clear()
     Ready = false;
 }
 
-void Controller::generate()
+void Controller::generate(QProgressBar *ProgressBar)
 {
     if (!MyPrzejscie) return;
-    MyPrzejscie->generate(this);
+    MyPrzejscie->generate(this, ProgressBar);
     Ready = true;
 }
 
@@ -90,7 +90,10 @@ float Controller::easing(float arg)
         return pow(1.0f-(1.0f-(sqrt(arg)))*fabs(cos(arg*M_PI*4.f)),1.5);
     case 4:    
         if (arg < (1.f/2.75f)) return (7.5625f*arg*arg);
-        else if (arg < (2.f/2.75f)) return (7.5625f*(arg-=(1.5f/2.75f))*arg + .75f);
+        else if (arg < (2.f/2.75f))
+            {
+            return (7.5625f*(arg-=(1.5f/2.75f))*arg + .75f);
+            }
         else if (arg < (2.5f/2.75f)) return (7.5625f*(arg-=(2.25f/2.75f))*arg + .9375f);
         else return (7.5625f*(arg-=(2.625f/2.75f))*arg + .984375f);
     case 5:

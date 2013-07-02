@@ -20,7 +20,7 @@ string Przejscie::getName()
     return Name;
 }
 
-void Przejscie::generate(Controller *C)
+void Przejscie::generate(Controller *C, QProgressBar *ProgressBar)
 {
     int w = C->Img1.width() > C->Img2.width() ? C->Img1.width() : C->Img2.width();
     int h = C->Img1.height() > C->Img2.height() ? C->Img1.height() : C->Img2.height();
@@ -33,6 +33,10 @@ void Przejscie::generate(Controller *C)
     {
         float percent = C->easing( (float)i/(C->Frames-1) );
         uchar *res =generateFrame(percent, w, h, Start, Stop);
+
+        ProgressBar->setValue(100*i/(C->Frames-1));
+        ProgressBar->repaint();
+
         QImage *Tmp = new QImage(w,h,QImage::Format_RGB888);
         UcharTab2Img(res, *Tmp);
         free(res);
@@ -70,8 +74,6 @@ void Przejscie::UcharTab2Img(const uchar* const In, QImage &Img)
         QRgb* Data = (QRgb*) Img.scanLine(i);
         for (int j=0; j<w; j++)
         {
-            //Data[j] = ((uint)In[ind]<<24) | ((uint)In[ind+1]<<16) | ((uint)In[ind+2]<<8);
-            //Data[i] = 31;
             Img.setPixel(j,i,((uint)In[ind]<<16) | ((uint)In[ind+1]<<8) | ((uint)In[ind+2]));
             ind+=3;
         }
