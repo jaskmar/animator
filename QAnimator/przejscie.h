@@ -9,6 +9,7 @@ class Przejscie;
 #include <string>
 #include <cmath>
 #include <QImage>
+#include <QProgressBar>
 using namespace std;
 typedef unsigned char uchar;
 
@@ -21,7 +22,7 @@ class Przejscie
 	Przejscie();
 	virtual ~Przejscie();
 	string getName();
-	void generate(Controller *C);
+    void generate(Controller *C, QProgressBar *ProgressBar);
 	
 	protected:
 	virtual uchar* generateFrame(float percent, int W, int H, uchar *Start, uchar *Stop)=0;

@@ -1,4 +1,2 @@
-Jak wczytasz obrazek to musi się doopasowywać do okienka
-Animacja też się powinna dopasować do okienka
-Nie działa jeszcze easing
-Nie pamietam co jeszcze
+Aligment->Horizontal musisz zmienić na Center.
+Przycisk "Zapisz" oprogramować. (W wx zapisywaliśmy wszystkie klatki do jpeg i tu pewnie to samo zrobimy)

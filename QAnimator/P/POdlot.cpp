@@ -6,7 +6,7 @@
 // class constructor
 POdlot::POdlot()
 {
-	Name = "Odlot :D";
+    Name = "Odlot";
 }
 
 // class destructor

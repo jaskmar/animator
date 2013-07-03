@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     ui->setupUi(this);
+    ui->progressBar->setVisible(false);
     EkranP = new QPixmap();
     Przejscia = VPrzejscia::getPrzejscia();
     for (int i=0; i<Przejscia->size(); i++)
@@ -21,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->PrzejsciaList->setCurrentRow(0);
 
     const vector<string> E = Controll.getEasings();
-    for (int i=E.size()-1; i>=0; i--)
+    for (int i=0; i<E.size(); i++)
     {
         QString tmp = tr(E[i].c_str());
         ui->EasingList->addItem(tmp);
@@ -81,7 +82,7 @@ void MainWindow::UpdateLabels()
     Controll.setFrames(ui->SliderF->value());
 }
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_pushButton_5_clicked()  //Wczytaj1
 {
     QFileDialog Dialog(this);
     Dialog.setFileMode(QFileDialog::ExistingFile);
@@ -91,13 +92,11 @@ void MainWindow::on_pushButton_5_clicked()
      {
          FileName = Dialog.selectedFiles()[0];
          Controll.getImg1().load(FileName);
-         QPixmap *a = new QPixmap();
-         a->convertFromImage(Controll.getImg1());
-         ui->Podglad1->setPixmap(*a);
+         resizeEvent(NULL);
      }
 }
 
-void MainWindow::on_pushButton_6_clicked()
+void MainWindow::on_pushButton_6_clicked()  //Wczytaj2
 {
     QFileDialog Dialog(this);
     Dialog.setFileMode(QFileDialog::ExistingFile);
@@ -107,9 +106,7 @@ void MainWindow::on_pushButton_6_clicked()
      {
          FileName = Dialog.selectedFiles()[0];
          Controll.getImg2().load(FileName);
-         QPixmap *a = new QPixmap();
-         a->convertFromImage(Controll.getImg2());
-         ui->Podglad2->setPixmap(*a);
+         resizeEvent(NULL);
      }
 }
 
@@ -120,21 +117,20 @@ void MainWindow::on_pushButton_clicked()
         QMessageBox::warning(this, tr("Brak gotowości"), tr("Musisz wybrać dwa obrazki"));
         return;
     }
-    //setSizeOk();
+    ui->progressBar->setVisible(true);
     Controll.clear();
-    Controll.generate();
+    Controll.generate(ui->progressBar);
     ui->Nawigator->setRange(0, ui->SliderF->value()-1);
     ui->Nawigator->setValue(0);
     ui->FNawigacja->setEnabled(true);
+    ui->progressBar->setVisible(false);
 
-    //ui->Ekran->SetBackgroundColour(QColour(240,240,240));
     QMessageBox::information(this, tr("Sukces"), tr("Animacja została wygenerowana"));
-    //refresh();
 }
 
 void MainWindow::on_pushButton_3_clicked()  //play
 {
-    if (ui->Nawigator->value()==ui->Nawigator->maximum()) ui->Nawigator->setValue(0);
+    if (ui->Nawigator->value()>=ui->Nawigator->maximum()) ui->Nawigator->setValue(0);
     Timer.setInterval(1000.0/ui->SliderFps->value() + 0.5);
     Timer.start();
 }
@@ -148,18 +144,43 @@ void MainWindow::onTimer()
 
     QPixmap *a = new QPixmap();
     a->convertFromImage(*tmp);
-    ui->Ekran->setPixmap(*a);
+    ui->Ekran->setPixmap( a->scaled(ui->Ekran->size(), Qt::KeepAspectRatio) );
+    delete a;
 
     if (N>=ui->Nawigator->maximum())
     {
         Timer.stop();
-        return;
     }
 }
 
 void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow)
 {
-    int N = currentRow;
-    Controll.setPrzejscie(Przejscia->at(N));
+    Controll.setPrzejscie(Przejscia->at(currentRow));
+    ui->FNawigacja->setEnabled(false);
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+    if (!Controll.getImg1().isNull())
+    {
+        QPixmap *a = new QPixmap();
+        a->convertFromImage(Controll.getImg1());
+        QPixmap Skalowana = a->scaled(ui->Podglad1->size(), Qt::KeepAspectRatio);
+        delete a;
+        ui->Podglad1->setPixmap(Skalowana);
+    }
+    if (!Controll.getImg2().isNull())
+    {
+        QPixmap *a = new QPixmap();
+        a->convertFromImage(Controll.getImg2());
+        QPixmap Skalowana = a->scaled(ui->Podglad1->size(), Qt::KeepAspectRatio);
+        delete a;
+        ui->Podglad2->setPixmap(Skalowana);
+    }
+}
+
+void MainWindow::on_EasingList_currentRowChanged(int currentRow)
+{
+    Controll.setEasing(currentRow);
     ui->FNawigacja->setEnabled(false);
 }

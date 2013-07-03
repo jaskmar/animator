@@ -13,14 +13,12 @@
 #include "P/PPaski.h"
 #include "P/POkno.h"
 #include "P/POdwrot.h"
-#include "P/PHsv.h"
 #include "P/PKostka.h"
 #include "P/PPrzylot.h"
 #include "P/PKolejnoscJasnosc.h"
 #include "P/PCzern.h"
 #include "P/POdlot.h"
 #include "P/PRGB.h"
-#include "P/PBlur.h"
 #include "P/PTesty.h"
 
 
@@ -36,7 +34,6 @@ VPrzejscia::VPrzejscia()
 {
     //tutaj trzeba dodawac wszystkie nowe przejscia
     push_back(new PNajazd_up());
-    push_back(new PBlur());
     push_back(new PPrzenikanie());
     push_back(new PKostka());
     push_back(new PBoks_in());
@@ -56,7 +53,6 @@ VPrzejscia::VPrzejscia()
     push_back(new PPrzylot());
     push_back(new PCzern());
     push_back(new POdlot());
-    push_back(new PHsv());
     push_back(new PFarba());
     push_back(new PPaski());
     
