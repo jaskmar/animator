@@ -41,6 +41,8 @@ private slots:
 
     void on_EasingList_currentRowChanged(int currentRow);
 
+    void on_pushButton_2_clicked();
+
 private:
     virtual void resizeEvent (QResizeEvent * event);
     Ui::MainWindow *ui;

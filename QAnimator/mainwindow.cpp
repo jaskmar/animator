@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QTextCodec>
 #include <QMessageBox>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -183,4 +184,40 @@ void MainWindow::on_EasingList_currentRowChanged(int currentRow)
 {
     Controll.setEasing(currentRow);
     ui->FNawigacja->setEnabled(false);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    if( ! Controll.isReady() )
+    {
+        QMessageBox::critical(this, tr("Błąd"), tr("Animacja nie została jeszcze wygenerowana!"));
+        return;
+    }
+
+    QFileDialog Dialog(this);
+    Dialog.setFileMode(QFileDialog::Directory);
+    QString Path;
+     if (Dialog.exec())
+     {
+         Path = Dialog.selectedFiles()[0];
+         QDateTime time = QDateTime::currentDateTime();
+         Path += "/" + time.toString("dd-MM-yyyy_hh-mm-ss_");
+
+         ui->progressBar->setVisible(true);
+         ui->progressBar->setRange(0, Controll.getFrames()-1);
+
+         for (int i = 0; i < Controll.getFrames(); ++i)
+         {
+             ui->progressBar->setValue(i);
+             QString fname = Path + QString::number(i).rightJustified(5, '0') + ".bmp";
+             bool success = Controll.getOutput(i).save(fname);
+
+             if ( ! success ) {
+                 QMessageBox::critical(this, tr("Błąd"), tr("Wystąpił błąd podczas zapisu plików."));
+                 return;
+             }
+         }
+         ui->progressBar->setVisible(false);
+         QMessageBox::information(this, tr("Sukces"), tr("Pliki zostały zapisane."));
+     }
 }
