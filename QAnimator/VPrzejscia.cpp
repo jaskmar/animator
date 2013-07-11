@@ -35,12 +35,12 @@ VPrzejscia::VPrzejscia()
     //tutaj trzeba dodawac wszystkie nowe przejscia
     push_back(new PNajazd_up());
     push_back(new PPrzenikanie());
+    push_back(new PKolejnoscJasnosc());
     push_back(new PKostka());
     push_back(new PBoks_in());
     push_back(new PBoks_out());
     push_back(new PTesty());
     push_back(new PRGB());
-    push_back(new PKolejnoscJasnosc());
     
     push_back(new PPrzepychanie_up());
     push_back(new PPrzepychanie_down());
@@ -60,5 +60,9 @@ VPrzejscia::VPrzejscia()
 
 VPrzejscia::~VPrzejscia()
 {
-    if (ptr) delete ptr;
+    if (ptr)
+    {
+        for (int i=0; i<ptr->size(); i++) delete ptr->at(i);
+        delete ptr;
+    }
 }

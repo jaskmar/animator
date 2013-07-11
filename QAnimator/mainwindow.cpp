@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     ui->setupUi(this);
-    ui->progressBar->setVisible(false);
     EkranP = new QPixmap();
     Przejscia = VPrzejscia::getPrzejscia();
     for (int i=0; i<Przejscia->size(); i++)
@@ -111,22 +110,22 @@ void MainWindow::on_pushButton_6_clicked()  //Wczytaj2
      }
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked()    //generuj
 {
     if (Controll.getImg1().isNull() || Controll.getImg2().isNull())
     {
         QMessageBox::warning(this, tr("Brak gotowości"), tr("Musisz wybrać dwa obrazki"));
         return;
     }
-    ui->progressBar->setVisible(true);
     Controll.clear();
     Controll.generate(ui->progressBar);
     ui->Nawigator->setRange(0, ui->SliderF->value()-1);
     ui->Nawigator->setValue(0);
     ui->FNawigacja->setEnabled(true);
-    ui->progressBar->setVisible(false);
 
     QMessageBox::information(this, tr("Sukces"), tr("Animacja została wygenerowana"));
+    on_Nawigator_valueChanged(0);
+    ui->progressBar->setValue(0);
 }
 
 void MainWindow::on_pushButton_3_clicked()  //play
@@ -154,7 +153,7 @@ void MainWindow::onTimer()
     }
 }
 
-void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow)
+void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow) //wybor przejscia
 {
     Controll.setPrzejscie(Przejscia->at(currentRow));
     ui->FNawigacja->setEnabled(false);
@@ -162,6 +161,7 @@ void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow)
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
+    if(Controll.isReady()) on_Nawigator_valueChanged(ui->Nawigator->value());
     if (!Controll.getImg1().isNull())
     {
         QPixmap *a = new QPixmap();
@@ -180,13 +180,13 @@ void MainWindow::resizeEvent(QResizeEvent* event)
     }
 }
 
-void MainWindow::on_EasingList_currentRowChanged(int currentRow)
+void MainWindow::on_EasingList_currentRowChanged(int currentRow)    //wybor easing'u
 {
     Controll.setEasing(currentRow);
     ui->FNawigacja->setEnabled(false);
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButton_2_clicked()  //zapis
 {
     if( ! Controll.isReady() )
     {
@@ -203,13 +203,12 @@ void MainWindow::on_pushButton_2_clicked()
          QDateTime time = QDateTime::currentDateTime();
          Path += "/" + time.toString("dd-MM-yyyy_hh-mm-ss_");
 
-         ui->progressBar->setVisible(true);
          ui->progressBar->setRange(0, Controll.getFrames()-1);
 
          for (int i = 0; i < Controll.getFrames(); ++i)
          {
              ui->progressBar->setValue(i);
-             QString fname = Path + QString::number(i).rightJustified(5, '0') + ".bmp";
+             QString fname = Path + QString::number(i).rightJustified(5, '0') + ".png";
              bool success = Controll.getOutput(i).save(fname);
 
              if ( ! success ) {
@@ -217,7 +216,29 @@ void MainWindow::on_pushButton_2_clicked()
                  return;
              }
          }
-         ui->progressBar->setVisible(false);
          QMessageBox::information(this, tr("Sukces"), tr("Pliki zostały zapisane."));
+         ui->progressBar->setValue(0);
      }
+}
+
+void MainWindow::on_Nawigator_sliderMoved(int position)
+{
+    //jednak nie tu
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    Timer.stop();
+}
+
+void MainWindow::on_Nawigator_valueChanged(int value)
+{
+    int N = value;
+
+    QImage *tmp = &Controll.getOutput(N);
+
+    QPixmap *a = new QPixmap();
+    a->convertFromImage(*tmp);
+    ui->Ekran->setPixmap( a->scaled(ui->Ekran->size(), Qt::KeepAspectRatio) );
+    delete a;
 }

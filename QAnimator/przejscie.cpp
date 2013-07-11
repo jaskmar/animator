@@ -35,7 +35,7 @@ void Przejscie::generate(Controller *C, QProgressBar *ProgressBar)
         uchar *res =generateFrame(percent, w, h, Start, Stop);
 
         ProgressBar->setValue(100*i/(C->Frames-1));
-        ProgressBar->repaint();
+        //ProgressBar->parentWidget()->repaint();
 
         QImage *Tmp = new QImage(w,h,QImage::Format_RGB888);
         UcharTab2Img(res, *Tmp);

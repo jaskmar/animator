@@ -43,6 +43,12 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_Nawigator_sliderMoved(int position);
+
+    void on_pushButton_4_clicked();
+
+    void on_Nawigator_valueChanged(int value);
+
 private:
     virtual void resizeEvent (QResizeEvent * event);
     Ui::MainWindow *ui;
