@@ -10,7 +10,7 @@ using namespace std;
 class VPrzejscia : public vector<Przejscie*>
 {
     private:
-    VPrzejscia();    //private bo to singleton
+    VPrzejscia();
     ~VPrzejscia();
     public:
     static VPrzejscia* getPrzejscia();
