@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     EkranP = new QPixmap();
     Przejscia = VPrzejscia::getPrzejscia();
-    for (int i=0; i<Przejscia->size(); i++)
+    for (unsigned int i=0; i<Przejscia->size(); i++)
     {
         QString tmp = tr(Przejscia->at(i)->getName().c_str());
         ui->PrzejsciaList->addItem(tmp);
@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->PrzejsciaList->setCurrentRow(0);
 
     const vector<string> E = Controll.getEasings();
-    for (int i=0; i<E.size(); i++)
+    for (unsigned int i=0; i<E.size(); i++)
     {
         QString tmp = tr(E[i].c_str());
         ui->EasingList->addItem(tmp);
@@ -159,7 +159,7 @@ void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow) //wybor prze
     ui->FNawigacja->setEnabled(false);
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event)
+void MainWindow::resizeEvent(QResizeEvent*)
 {
     if(Controll.isReady()) on_Nawigator_valueChanged(ui->Nawigator->value());
     if (!Controll.getImg1().isNull())
@@ -221,7 +221,7 @@ void MainWindow::on_pushButton_2_clicked()  //zapis
      }
 }
 
-void MainWindow::on_Nawigator_sliderMoved(int position)
+void MainWindow::on_Nawigator_sliderMoved(int)
 {
     //jednak nie tu
 }

@@ -9,9 +9,6 @@ class Controller;
 #include <vector>
 using namespace std;
 
-/*
- * No description
- */
 class Controller
 {
     friend class Przejscie;

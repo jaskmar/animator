@@ -62,7 +62,7 @@ VPrzejscia::~VPrzejscia()
 {
     if (ptr)
     {
-        for (int i=0; i<ptr->size(); i++) delete ptr->at(i);
+        for (unsigned int i=0; i<ptr->size(); i++) delete ptr->at(i);
         delete ptr;
     }
 }
