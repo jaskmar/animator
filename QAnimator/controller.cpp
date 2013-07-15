@@ -71,6 +71,9 @@ void Controller::generate(QProgressBar *ProgressBar)
 {
     if (!MyPrzejscie) return;
     MyPrzejscie->generate(this, ProgressBar);
+}
+
+void Controller::generated() {
     Ready = true;
 }
 

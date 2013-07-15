@@ -12,10 +12,8 @@ using namespace std;
 class Controller
 {
     friend class Przejscie;
-	public:
-		// class constructor
-		Controller();
-		// class destructor
+    public:
+        Controller();
 		~Controller();
 		void setFrames(int arg);
 		
@@ -29,6 +27,7 @@ class Controller
         bool isReady();
         void clear();
         void generate(QProgressBar *ProgressBar);
+        void generated();
 	private:
         float easing (float arg);
         QImage Img1;

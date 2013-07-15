@@ -6,6 +6,7 @@
 #include <QTimer>
 #include "controller.h"
 #include "VPrzejscia.h"
+#include <QString>
 
 namespace Ui {
 class MainWindow;
@@ -14,12 +15,18 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+public slots:
+    void save_finished();
     
 private slots:
+    void animation_generated_info();
+
+    void updateProgress();
 
     void on_SliderF_valueChanged(int value);
 
@@ -43,13 +50,12 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-    void on_Nawigator_sliderMoved(int position);
-
     void on_pushButton_4_clicked();
 
     void on_Nawigator_valueChanged(int value);
 
 private:
+    void toggleGui(bool);
     virtual void resizeEvent (QResizeEvent * event);
     Ui::MainWindow *ui;
     void UpdateLabels();
@@ -57,6 +63,8 @@ private:
     VPrzejscia *Przejscia;
     QPixmap *EkranP;
     QTimer Timer;
+    Przejscie *last;
+    int _steps;
 };
 
 #endif // MAINWINDOW_H

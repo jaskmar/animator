@@ -11,6 +11,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = QAnimator
 TEMPLATE = app
 
+LIBS += -ltbb
+LIBS += -LC:/tbb/lib
+INCLUDEPATH += C:/tbb/include
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -37,7 +41,10 @@ SOURCES += main.cpp\
     P/PFarba.cpp \
     P/PCzern.cpp \
     P/PBoks_out.cpp \
-    P/PBoks_in.cpp
+    P/PBoks_in.cpp \
+    tbbsaveworker.cpp \
+    savethreadworker.cpp \
+    generatethreadworker.cpp
 
 HEADERS  += mainwindow.h \
     VPrzejscia.h \
@@ -63,6 +70,9 @@ HEADERS  += mainwindow.h \
     P/PFarba.h \
     P/PCzern.h \
     P/PBoks_out.h \
-    P/PBoks_in.h
+    P/PBoks_in.h \
+    tbbsaveworker.h \
+    savethreadworker.h \
+    generatethreadworker.h
 
 FORMS    += mainwindow.ui

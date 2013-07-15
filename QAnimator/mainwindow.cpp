@@ -1,9 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "savethreadworker.h"
 #include <QFileDialog>
 #include <QTextCodec>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QMutex>
+#include <QThread>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,7 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
         QString tmp = tr(Przejscia->at(i)->getName().c_str());
         ui->PrzejsciaList->addItem(tmp);
     }
-    Controll.setPrzejscie(Przejscia->at(0));
+    last = Przejscia->at(0);
+    connect(last, SIGNAL(generatingFinished()), this, SLOT(animation_generated_info()));
+    Controll.setPrzejscie(last);
     ui->PrzejsciaList->setCurrentRow(0);
 
     const vector<string> E = Controll.getEasings();
@@ -117,11 +122,16 @@ void MainWindow::on_pushButton_clicked()    //generuj
         QMessageBox::warning(this, tr("Brak gotowości"), tr("Musisz wybrać dwa obrazki"));
         return;
     }
+    toggleGui(false);
     Controll.clear();
     Controll.generate(ui->progressBar);
+}
+
+void MainWindow::animation_generated_info() {
     ui->Nawigator->setRange(0, ui->SliderF->value()-1);
     ui->Nawigator->setValue(0);
-    ui->FNawigacja->setEnabled(true);
+    toggleGui(true);
+    ui->progressBar->setValue(1);
 
     QMessageBox::information(this, tr("Sukces"), tr("Animacja została wygenerowana"));
     on_Nawigator_valueChanged(0);
@@ -153,9 +163,25 @@ void MainWindow::onTimer()
     }
 }
 
+void MainWindow::toggleGui(bool enable) {
+    ui->SliderF->setEnabled(enable);
+    ui->SliderFps->setEnabled(enable);
+    ui->SliderS->setEnabled(enable);
+
+    ui->FNawigacja->setEnabled(enable);
+
+    ui->pushButton->setEnabled(enable);
+    ui->pushButton_2->setEnabled(enable);
+    ui->pushButton_5->setEnabled(enable);
+    ui->pushButton_6->setEnabled(enable);
+}
+
 void MainWindow::on_PrzejsciaList_currentRowChanged(int currentRow) //wybor przejscia
 {
-    Controll.setPrzejscie(Przejscia->at(currentRow));
+    disconnect(last, SIGNAL(generatingFinished()), this, SLOT(animation_generated_info()));
+    last = Przejscia->at(currentRow);
+    connect(last, SIGNAL(generatingFinished()), this, SLOT(animation_generated_info()));
+    Controll.setPrzejscie(last);
     ui->FNawigacja->setEnabled(false);
 }
 
@@ -204,26 +230,35 @@ void MainWindow::on_pushButton_2_clicked()  //zapis
          Path += "/" + time.toString("dd-MM-yyyy_hh-mm-ss_");
 
          ui->progressBar->setRange(0, Controll.getFrames()-1);
+         toggleGui(false);
+         _steps = 0;
 
-         for (int i = 0; i < Controll.getFrames(); ++i)
-         {
-             ui->progressBar->setValue(i);
-             QString fname = Path + QString::number(i).rightJustified(5, '0') + ".png";
-             bool success = Controll.getOutput(i).save(fname);
-
-             if ( ! success ) {
-                 QMessageBox::critical(this, tr("Błąd"), tr("Wystąpił błąd podczas zapisu plików."));
-                 return;
-             }
-         }
-         QMessageBox::information(this, tr("Sukces"), tr("Pliki zostały zapisane."));
-         ui->progressBar->setValue(0);
+         SaveThreadWorker *worker = new SaveThreadWorker(this, &Controll, Path);
+         QThread *t = new QThread();
+         worker->moveToThread(t);
+         connect(t, SIGNAL(started()), worker, SLOT(run()));
+         connect(worker, SIGNAL(finished()), t, SLOT(quit()));
+         connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+         connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+         t->start();
      }
 }
 
-void MainWindow::on_Nawigator_sliderMoved(int)
-{
-    //jednak nie tu
+void MainWindow::save_finished() {
+    ui->progressBar->setValue(1);
+    QMessageBox::information(this, tr("Sukces"), tr("Pliki zostały zapisane."));
+    ui->progressBar->setValue(0);
+    toggleGui(true);
+}
+
+void MainWindow::updateProgress() {
+    QMutex mutex;
+    mutex.lock();
+    _steps++;
+    mutex.unlock();
+
+    ui->progressBar->setValue(100*_steps/(Controll.getFrames()-1));
+    ui->progressBar->parentWidget()->repaint();
 }
 
 void MainWindow::on_pushButton_4_clicked()

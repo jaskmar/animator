@@ -1,9 +1,13 @@
 #include "przejscie.h"
 #include <QMessageBox>
+//#include <tbb/parallel_for.h>
+#include <QMutex>
+#include <QThread>
+#include "generatethreadworker.h"
 
 Przejscie::Przejscie()
 {
-
+    connect(this, SIGNAL(afterStep()), this, SLOT(updateProgress()));
 }
 
 Przejscie::~Przejscie()
@@ -16,33 +20,70 @@ string Przejscie::getName()
     return Name;
 }
 
-void Przejscie::generate(Controller *C, QProgressBar *ProgressBar)
-{
-    int w = C->Img1.width() > C->Img2.width() ? C->Img1.width() : C->Img2.width();
-    int h = C->Img1.height() > C->Img2.height() ? C->Img1.height() : C->Img2.height();
-    uchar *Start=new uchar[w*h*3];
-    uchar *Stop=new uchar[w*h*3];
-    Img2UcharTab(C->Img1.scaled(w,h), Start);
-    Img2UcharTab(C->Img2.scaled(w,h), Stop);
+Przejscie::TbbGenerateWorker::TbbGenerateWorker(Przejscie *parent, Controller *c) {
+    _parent = parent;
+    _c = c;
+}
+void Przejscie::TbbGenerateWorker::operator ()(int i) const {
+    float percent = _c->easing( (float)i/(_c->Frames-1) );
+    uchar *res = _parent->generateFrame(percent, _parent->_w, _parent->_h, _parent->_start, _parent->_stop);
 
-    for (int i=0; i<C->Frames; i++)
-    {
-        float percent = C->easing( (float)i/(C->Frames-1) );
-        uchar *res =generateFrame(percent, w, h, Start, Stop);
-
-        ProgressBar->setValue(100*i/(C->Frames-1));
-        //ProgressBar->parentWidget()->repaint();
-
-        QImage *Tmp = new QImage(w,h,QImage::Format_RGB888);
-        UcharTab2Img(res, *Tmp);
-        free(res);
-        C->Output.push_back(Tmp);
-    }
-
-    delete[] Start;
-    delete[] Stop;
+    QImage *Tmp = new QImage(_parent->_w, _parent->_h,QImage::Format_RGB888);
+    _parent->UcharTab2Img(res, *Tmp);
+    free(res);
+    _c->Output.at(i) = Tmp;
+    _parent->step();
 }
 
+void Przejscie::step() {
+    QMutex mutex;
+    mutex.lock();
+    _steps++;
+    mutex.unlock();
+    emit afterStep();
+}
+
+void Przejscie::updateProgress() {
+    _progress->setValue(100*_steps/(_c->Frames-1));
+    _progress->parentWidget()->repaint();
+}
+/*
+GenerateThreadWorker::GenerateThreadWorker(Przejscie* parent, Controller *c, int stop) {
+    _parent = parent;
+    _c = c;
+    _stop = stop;
+}
+void GenerateThreadWorker::run() {
+    tbb::parallel_for(0, _stop, 1, Przejscie::TbbGenerateWorker(_parent, _c));
+    delete[] _parent->_start;
+    delete[] _parent->_stop;
+    _c->generated();
+    emit _parent->generatingFinished();
+}*/
+
+void Przejscie::generate(Controller *C, QProgressBar *ProgressBar)
+{
+    _progress = ProgressBar;
+    _c = C;
+    _w = C->Img1.width() > C->Img2.width() ? C->Img1.width() : C->Img2.width();
+    _h = C->Img1.height() > C->Img2.height() ? C->Img1.height() : C->Img2.height();
+    _start = new uchar[_w*_h*3];
+    _stop = new uchar[_w*_h*3];
+    Img2UcharTab(C->Img1.scaled(_w,_h), _start);
+    Img2UcharTab(C->Img2.scaled(_w,_h), _stop);
+    _steps = 0;
+    C->Output.clear();
+    C->Output.resize(C->Frames);
+
+    GenerateThreadWorker *threadWorker = new GenerateThreadWorker(this, C, C->Frames);
+    QThread *t = new QThread();
+    threadWorker->moveToThread(t);
+    connect(t, SIGNAL(started()), threadWorker, SLOT(run()));
+    connect(threadWorker, SIGNAL(finished()), t, SLOT(quit()));
+    connect(threadWorker, SIGNAL(finished()), threadWorker, SLOT(deleteLater()));
+    connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+    t->start();
+}
 void Przejscie::Img2UcharTab(const QImage &Img, uchar* Out)
 {
     int w = Img.width();
