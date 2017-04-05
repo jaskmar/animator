@@ -93,15 +93,12 @@ float Controller::easing(float arg)
             {
                 arg -= (1.5f/2.75f);
                 return (7.5625f*arg*arg + .75f);
-            //return (7.5625f*(arg-=(1.5f/2.75f))*arg + .75f);
             }
         else if (arg < (2.5f/2.75f)) {
-            //return (7.5625f*(arg-=(2.25f/2.75f))*arg + .9375f);
             arg -= (2.25f/2.75f);
             return (7.5625f*arg*arg + .9375f);
         }
         else {
-            //return (7.5625f*(arg-=(2.625f/2.75f))*arg + .984375f);
             arg-=(2.625f/2.75f);
             return (7.5625f*arg*arg + .984375f);
         }

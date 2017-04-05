@@ -1,6 +1,5 @@
 #include "przejscie.h"
 #include <QMessageBox>
-//#include <tbb/parallel_for.h>
 #include <QMutex>
 #include <QThread>
 #include "generatethreadworker.h"
@@ -47,19 +46,6 @@ void Przejscie::updateProgress() {
     _progress->setValue(100*_steps/(_c->Frames-1));
     _progress->parentWidget()->repaint();
 }
-/*
-GenerateThreadWorker::GenerateThreadWorker(Przejscie* parent, Controller *c, int stop) {
-    _parent = parent;
-    _c = c;
-    _stop = stop;
-}
-void GenerateThreadWorker::run() {
-    tbb::parallel_for(0, _stop, 1, Przejscie::TbbGenerateWorker(_parent, _c));
-    delete[] _parent->_start;
-    delete[] _parent->_stop;
-    _c->generated();
-    emit _parent->generatingFinished();
-}*/
 
 void Przejscie::generate(Controller *C, QProgressBar *ProgressBar)
 {
@@ -108,7 +94,6 @@ void Przejscie::UcharTab2Img(const uchar* const In, QImage &Img)
     int ind=0;
     for (int i=0; i<h; i++)
     {
-        //QRgb* Data = (QRgb*) Img.scanLine(i);
         for (int j=0; j<w; j++)
         {
             Img.setPixel(j,i,((uint)In[ind]<<16) | ((uint)In[ind+1]<<8) | ((uint)In[ind+2]));

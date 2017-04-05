@@ -15,12 +15,10 @@ uchar* PPaski::generateFrame(float percent, int W, int H, uchar *Start, uchar *S
 {
     uchar* res = (uchar*) malloc(3*W*H);
     srand(324);
-    //percent = 1.0f-percent;
     for (int i=0; i<W; i++)
     {
         float s = rand()/(RAND_MAX+1.0f);
         s*=0.9;
-        //if ( percent < s ) continue;
         for (int j=0; j<H; j++)
         {
             float P = (percent-s)/(1-s);

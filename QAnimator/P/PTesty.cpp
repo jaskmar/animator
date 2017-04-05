@@ -16,10 +16,6 @@ uchar* PTesty::generateFrame(float percent, int W, int H, uchar *Start, uchar *S
     uchar* res = (uchar*) malloc(3*W*H);
     float p = percent;
     float P = 1-p;
-    //float sp = sin(p*M_PI);
-    //float spp= sin(M_PI*p*0.5);
-    //float sP = sin(M_PI*P);
-    //float sPp= sin(M_PI*P*0.5);
     float a = percent*M_PI;
     float sina1 = sin(a);
     float cosa1 = cos(a);
